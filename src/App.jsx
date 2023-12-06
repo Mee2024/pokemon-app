@@ -16,7 +16,7 @@ function App() {
   const fetchPokeData = async () => {
     try {
       const response = await axios.get(url);
-      console.log(response.data.results);
+      //console.log(response.data.results);
       setPokemons(response.data.results);
     } catch (error) {
       console.error(error);

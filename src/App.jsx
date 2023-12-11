@@ -1,50 +1,34 @@
-import { useEffect, useState } from 'react'
-import './App.css';
-import axios from 'axios';
-import PokeCard from './components/PokeCard.jsx';
+import { BrowserRouter, Outlet } from "react-router-dom"
+import MainPage from "./LoginPage/MainPage"
+import { Routes,Route } from "react-router-dom"
+import LoginPage from "./LoginPage/LoginPage"
+import NavBar from "./components/NavBar"
+import DetailPage from "./pages/DetailPage"
 
-function App() {
-
-  const [pokemons,setPokemons] = useState([]);
-  
-  const url = 'https:pokeapi.co/api/v2/pokemon/?limit=10&offset=0';
-  
-  useEffect(() =>{
-   fetchPokeData();
-  },[])
-  
-  const fetchPokeData = async () => {
-    try {
-      const response = await axios.get(url);
-      //console.log(response.data.results);
-      setPokemons(response.data.results);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-    return (
-      <article className='pt-6'>
-        <header className='flex flex-col gap-2 w-full px-4 z-50 underline'>
-        Input Form 부분 
-      </header>
-      <section className='pt-6 flex flex-co justify-content items-center overflow-auto z-0'>
-        <div className='flex flex-ro flex-wrap gap-[16px] items-center justify-center px-2 max-4xl'>
-            {pokemons.length > 0 ? 
-            (
-            pokemons.map(({url, name}, index) => (
-            <PokeCard key={url} name={name}/>
-            ))
-            ):
-            (
-              <h2>
-                포켓몬이 없습니다.
-              </h2>
-            )}
-        </div>
-
-      </section>
-      </article>
-    )
-  }
+const Layout = () => {
+  return(
+    <>
+      <NavBar/>
+      <br />
+      <br />
+      <br />
+      <Outlet/> 
+    </>
+  )
+}
+// path 에 지정한 경로페이지가 Outlet 에 매핑이 됨 
+const App = () =>{
+  return(
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout/>}>
+          <Route index element={<MainPage/>} />
+          <Route path="login" element={LoginPage}/>
+         <Route path="/pokemon/:id" element={<DetailPage/>}/>
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  )
+}
   export default App
   

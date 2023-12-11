@@ -1,17 +1,19 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import Lazylmage from "./Lazylmage";
+import { Link } from "react-router-dom";
 
- const PokeCard = ({url, name}) => {
+ const PokeCard = (url) => {
     const [pokemon, setPokemon] = useState();
     
     useEffect(() => {
     fetchPokeDetailData();
-    },[url,name])
+    },[url]);
 
     async function fetchPokeDetailData(){
         try {
             const response = await axios.get(url);
-            //console.log(response.data);
+            console.log(response.data);
             const pokemonData = formatPokemonData(response.data);
             setPokemon(pokemonData);
         } catch (error) {
@@ -20,6 +22,7 @@ import { useEffect, useState } from "react"
     }
 
     function formatPokemonData(params){
+    console.log(params);
       const {id,types,name} = params;
       const PokeData = {
         id,
@@ -29,20 +32,21 @@ import { useEffect, useState } from "react"
       return PokeData;
     }
 
-    console.log(pokemon);
+    //console.log(pokemon);
 
     const bg = `bg-${pokemon?.type}`;
     const border = `border-${pokemon?.type}`;
     const text = `text-${pokemon?.type}`;
 
     const img = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon?.id}.png`;
+     
 
   return (
     <>
    
     {pokemon && 
-    <a 
-      href={`/pokemon/${name}`}
+    <Link 
+      to={`/pokemon/${name}`}
       className={`box-border rounded-lg ${border} w-[8.5rem] h-[8.5rem] z-0 bg-slate-800 justify-between items-center`}
       >
         <div
@@ -53,20 +57,18 @@ import { useEffect, useState } from "react"
         <div className={`w-full f-6 flex items-center`}>
           <div className={`box-border relative flex w-full h-[5.5rem] basis justify-center items-center`}
           >
-            <img
-            src={img}
-            alt={name}
-            width="100%"
-            className={`Object-contain h-full`}
+            <Lazylmage
+             url={img}
+             alt={name}
             />
           </div>
         </div>
         <div
-        className={`${bg} text-xs text-zinc-100 h-[1.5rem] rounded-b-lg uppercase font-medium pt-1`}
+        className={`${bg} text-center text-xs text-zinc-100 h-[1.5rem] rounded-b-lg uppercase font-medium pt-1`}
         >
           {pokemon.name}
         </div>
-      </a>  
+      </Link>  
  }
     </>
   )
